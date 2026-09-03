@@ -1,456 +1,361 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Amigo Secreto | Hostal</title>
+  <title>Amigo Secreto 🎁</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        body {
-            margin: 0;
-            font-family: "Poppins", sans-serif;
-            background: #f5efe4;
-            color: #26352f;
-        }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f5eadc;
+      color: #24382f;
+    }
 
-        .hero {
-            background: #24443d;
-            color: #fffaf1;
-            padding: 55px 20px 75px;
-            position: relative;
-            overflow: hidden;
-        }
+    header {
+      background: #24382f;
+      color: white;
+      padding: 45px 20px;
+      text-align: center;
+      border-bottom: 8px solid #c76f4b;
+    }
 
-        .hero::before,
-        .hero::after {
-            content: "✦";
-            position: absolute;
-            font-size: 80px;
-            opacity: 0.12;
-        }
+    header h1 {
+      margin: 0;
+      font-size: 2.3rem;
+    }
 
-        .hero::before {
-            top: 20px;
-            left: 8%;
-        }
+    header p {
+      margin: 10px 0 0;
+      opacity: 0.9;
+    }
 
-        .hero::after {
-            bottom: 10px;
-            right: 10%;
-        }
+    .container {
+      max-width: 850px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
 
-        .hero-contenido {
-            max-width: 900px;
-            margin: auto;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
+    .selector-box {
+      background: white;
+      padding: 28px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
 
-        .mini-titulo {
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
 
-        h1 {
-            font-size: clamp(42px, 8vw, 75px);
-            line-height: 1;
-            margin: 15px 0;
-            font-weight: 800;
-        }
+    select {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      background: white;
+      color: #24382f;
+      cursor: pointer;
+    }
 
-        .hero p {
-            font-size: 17px;
-            max-width: 600px;
-            margin: auto;
-            opacity: 0.9;
-        }
+    select:focus {
+      outline: none;
+      border-color: #c76f4b;
+    }
 
-        .contenido {
-            max-width: 900px;
-            margin: -35px auto 60px;
-            padding: 0 20px;
-            position: relative;
-            z-index: 2;
-        }
+    #loading {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
 
-        .tarjeta {
-            background: #fffaf1;
-            border-radius: 24px;
-            padding: 30px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(38, 53, 47, 0.08);
-        }
+    #error {
+      display: none;
+      background: #fff0ed;
+      color: #9b3d27;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
 
-        .tarjeta h2 {
-            margin-top: 0;
-            font-size: 24px;
-        }
+    #profile {
+      display: none;
+    }
 
-        .tarjeta p {
-            color: #65716c;
-        }
+    .profile-title {
+      text-align: center;
+      margin-bottom: 25px;
+    }
 
-        .boton {
-            display: inline-block;
-            width: 100%;
-            padding: 15px 20px;
-            margin-top: 15px;
-            border-radius: 14px;
-            border: none;
-            background: #d96b4f;
-            color: white;
-            font-family: inherit;
-            font-size: 15px;
-            font-weight: 700;
-            text-decoration: none;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
-        }
+    .profile-title h2 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
 
-        .boton:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
 
-        select {
-            width: 100%;
-            padding: 15px;
-            border-radius: 14px;
-            border: 2px solid #e5dccd;
-            background: white;
-            color: #26352f;
-            font-family: inherit;
-            font-size: 15px;
-            outline: none;
-            cursor: pointer;
-        }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: #c76f4b;
+    }
 
-        select:focus {
-            border-color: #d96b4f;
-        }
+    .card p {
+      margin: 0;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
 
-        .ficha {
-            display: none;
-            margin-top: 25px;
-            padding: 25px;
-            background: #eef1e7;
-            border-radius: 18px;
-        }
+    .empty {
+      color: #999;
+      font-style: italic;
+    }
 
-        .ficha.activa {
-            display: block;
-        }
+    footer {
+      text-align: center;
+      padding: 35px 20px;
+      color: #777;
+      font-size: 0.9rem;
+    }
 
-        .ficha h3 {
-            margin-top: 0;
-            font-size: 22px;
-        }
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
 
-        .gusto {
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(38, 53, 47, 0.1);
-        }
+      .container {
+        margin-top: 25px;
+      }
 
-        .gusto:last-child {
-            border-bottom: none;
-        }
-
-        .gusto strong {
-            display: block;
-            margin-bottom: 3px;
-        }
-
-        .etiqueta {
-            display: inline-block;
-            background: #e7b95e;
-            color: #26352f;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin: 3px;
-        }
-
-        .pie {
-            text-align: center;
-            color: #7b837f;
-            font-size: 13px;
-            padding: 20px;
-        }
-
-        @media (max-width: 600px) {
-            .hero {
-                padding: 45px 20px 65px;
-            }
-
-            .tarjeta {
-                padding: 22px;
-            }
-        }
-    </style>
+      .selector-box {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <section class="hero">
-        <div class="hero-contenido">
-            <div class="mini-titulo">🏨 HOSTAL · 🎉 2026</div>
+<header>
+  <h1>🎁 Amigo Secreto</h1>
+  <p>Conoce un poquito mejor a la persona que te tocó 👀</p>
+</header>
 
-            <h1>Amigo<br>Secreto ✨</h1>
+<div class="container">
 
-            <p>
-                Porque conocer los gustos de tu amigo secreto
-                debería ser fácil... y descubrir quién es, no tanto. 👀
-            </p>
-        </div>
-    </section>
+  <div class="selector-box">
+    <label for="personSelect">¿A quién te tocó?</label>
 
+    <select id="personSelect">
+      <option value="">Selecciona una persona...</option>
+    </select>
+  </div>
 
-    <main class="contenido">
+  <div id="loading">
+    ⏳ Cargando las preferencias...
+  </div>
 
-        <!-- FORMULARIO -->
-        <section class="tarjeta">
-            <h2>📝 Cuéntanos tus gustos</h2>
+  <div id="error">
+    😭 No pudimos cargar las preferencias. Intenta actualizar la página.
+  </div>
 
-            <p>
-                Déjanos algunas pistas para que tu amigo secreto
-                pueda sorprenderte durante el mes.
-            </p>
+  <div id="profile">
 
-            <a href="#" class="boton">
-                QUIERO REGISTRAR MIS GUSTOS
-            </a>
-        </section>
-
-
-        <!-- CONSULTAR -->
-        <section class="tarjeta">
-
-            <h2>🔎 ¿Quién te tocó?</h2>
-
-            <p>
-                Selecciona a tu amigo secreto para conocer
-                sus gustos y preferencias.
-            </p>
-
-            <select id="persona" onchange="mostrarGustos()">
-
-                <option value="">
-                    — Selecciona una persona —
-                </option>
-
-                <option value="gabriela">
-                    Gabriela
-                </option>
-
-                <option value="carlos">
-                    Carlos
-                </option>
-
-                <option value="maria">
-                    María
-                </option>
-
-            </select>
-
-
-            <!-- GABRIELA -->
-            <div id="gabriela" class="ficha">
-
-                <h3>✨ Gabriela</h3>
-
-                <div class="gusto">
-                    <strong>🍫 Dulce favorito</strong>
-                    KitKat
-                </div>
-
-                <div class="gusto">
-                    <strong>🧂 Snack salado</strong>
-                    Papitas
-                </div>
-
-                <div class="gusto">
-                    <strong>🍓 Fruta favorita</strong>
-                    Fresas
-                </div>
-
-                <div class="gusto">
-                    <strong>🥤 Bebida favorita</strong>
-                    Coca-Cola
-                </div>
-
-                <div class="gusto">
-                    <strong>🎨 Color favorito</strong>
-                    Morado
-                </div>
-
-                <div class="gusto">
-                    <strong>🎵 Música</strong>
-                    Pop
-                </div>
-
-                <div class="gusto">
-                    <strong>🎁 Le gustan</strong>
-                    Cosas útiles, comida y cosas graciosas.
-                </div>
-
-                <div class="gusto">
-                    <strong>🚫 No le gusta</strong>
-                    Café
-                </div>
-
-            </div>
-
-
-            <!-- CARLOS -->
-            <div id="carlos" class="ficha">
-
-                <h3>✨ Carlos</h3>
-
-                <div class="gusto">
-                    <strong>🍫 Dulce favorito</strong>
-                    Chocolatina
-                </div>
-
-                <div class="gusto">
-                    <strong>🧂 Snack salado</strong>
-                    Maní
-                </div>
-
-                <div class="gusto">
-                    <strong>🍓 Fruta favorita</strong>
-                    Mango
-                </div>
-
-                <div class="gusto">
-                    <strong>🥤 Bebida favorita</strong>
-                    Té frío
-                </div>
-
-                <div class="gusto">
-                    <strong>🎨 Color favorito</strong>
-                    Azul
-                </div>
-
-                <div class="gusto">
-                    <strong>🎵 Música</strong>
-                    Reggaetón
-                </div>
-
-                <div class="gusto">
-                    <strong>🎁 Le gustan</strong>
-                    Cosas deportivas y snacks.
-                </div>
-
-                <div class="gusto">
-                    <strong>🚫 No le gusta</strong>
-                    Cosas muy dulces.
-                </div>
-
-            </div>
-
-
-            <!-- MARÍA -->
-            <div id="maria" class="ficha">
-
-                <h3>✨ María</h3>
-
-                <div class="gusto">
-                    <strong>🍫 Dulce favorito</strong>
-                    Ferrero Rocher
-                </div>
-
-                <div class="gusto">
-                    <strong>🧂 Snack salado</strong>
-                    Doritos
-                </div>
-
-                <div class="gusto">
-                    <strong>🍓 Fruta favorita</strong>
-                    Uvas
-                </div>
-
-                <div class="gusto">
-                    <strong>🥤 Bebida favorita</strong>
-                    Jugo de mango
-                </div>
-
-                <div class="gusto">
-                    <strong>🎨 Color favorito</strong>
-                    Rosado
-                </div>
-
-                <div class="gusto">
-                    <strong>🎵 Música</strong>
-                    Música latina
-                </div>
-
-                <div class="gusto">
-                    <strong>🎁 Le gustan</strong>
-                    Cosas bonitas y papelería.
-                </div>
-
-                <div class="gusto">
-                    <strong>🚫 No le gusta</strong>
-                    Picante.
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <div class="pie">
-        Hecho con 🫶 para el amigo secreto del hostal
+    <div class="profile-title">
+      <h2 id="personName"></h2>
+      <p>✨ Estas son sus preferencias</p>
     </div>
 
+    <div class="card">
+      <h3>💬 Sobre mí</h3>
+      <p id="about"></p>
+    </div>
 
-    <script>
+    <div class="card">
+      <h3>🎵 Música / artista favorito</h3>
+      <p id="artist"></p>
+    </div>
 
-        function mostrarGustos() {
+    <div class="card">
+      <h3>🍬 Dulces</h3>
+      <p id="sweet"></p>
+    </div>
 
-            // Ocultar todas las fichas
-            const fichas = document.querySelectorAll(".ficha");
+    <div class="card">
+      <h3>🥨 Snacks salados</h3>
+      <p id="salty"></p>
+    </div>
 
-            fichas.forEach(function(ficha) {
-                ficha.classList.remove("activa");
-            });
+    <div class="card">
+      <h3>🍓 Frutas</h3>
+      <p id="fruit"></p>
+    </div>
+
+    <div class="card">
+      <h3>🥤 Bebidas</h3>
+      <p id="drinks"></p>
+    </div>
+
+    <div class="card">
+      <h3>🚫 Cosas que NO me gustan</h3>
+      <p id="dislikes"></p>
+    </div>
+
+    <div class="card">
+      <h3>💡 Algo más que deberías saber</h3>
+      <p id="extra"></p>
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  Hecho con 💚 para el amigo secreto del hostal
+</footer>
 
 
-            // Obtener la persona seleccionada
-            const seleccion = document.getElementById("persona").value;
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.3/papaparse.min.js"></script>
+
+<script>
+
+  const sheetURL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUxlictPO1Mev3wXz0X2UujPE6HoS4AMOsp24EStab9jspANlQnt_BS2PBa0P3r8l9h33904gJomnZ/pub?gid=568351220&single=true&output=csv";
+
+  let people = [];
+
+  const select = document.getElementById("personSelect");
+  const loading = document.getElementById("loading");
+  const error = document.getElementById("error");
+  const profile = document.getElementById("profile");
 
 
-            // Mostrar su ficha
-            if (seleccion !== "") {
+  Papa.parse(sheetURL, {
 
-                const ficha = document.getElementById(seleccion);
+    download: true,
 
-                if (ficha) {
-                    ficha.classList.add("activa");
-                }
+    header: true,
 
-            }
+    skipEmptyLines: true,
 
-        }
+    complete: function(results) {
 
-    </script>
+      people = results.data.filter(person => {
+        return person["Nombre"] && person["Nombre"].trim() !== "";
+      });
+
+      if (people.length === 0) {
+        loading.style.display = "none";
+        error.style.display = "block";
+        error.innerHTML =
+          "😅 Todavía no hay personas registradas en el formulario.";
+        return;
+      }
+
+      people.sort((a, b) =>
+        a["Nombre"].localeCompare(b["Nombre"], "es")
+      );
+
+      people.forEach((person, index) => {
+
+        const option = document.createElement("option");
+
+        option.value = index;
+
+        option.textContent = person["Nombre"];
+
+        select.appendChild(option);
+
+      });
+
+      loading.style.display = "none";
+    },
+
+    error: function() {
+
+      loading.style.display = "none";
+
+      error.style.display = "block";
+
+    }
+
+  });
+
+
+  select.addEventListener("change", function() {
+
+    const index = this.value;
+
+    if (index === "") {
+
+      profile.style.display = "none";
+
+      return;
+
+    }
+
+    const person = people[index];
+
+    document.getElementById("personName").textContent =
+      person["Nombre"] || "Sin nombre";
+
+    document.getElementById("about").textContent =
+      person["¿Cómo te describirías en pocas palabras? Cuéntanos un poquito sobre ti, tus hobbies o cualquier cosa que creas que pueda ayudarle a tu amigo secreto a conocerte mejor."] || "No respondió esta pregunta.";
+
+    document.getElementById("artist").textContent =
+      person["¿Cuál es tu artista favorito? Puedes mencionar uno o varios artistas, grupos, géneros musicales o cualquier cosa relacionada con la música que te guste."] || "No respondió esta pregunta.";
+
+    document.getElementById("sweet").textContent =
+      person["¿Qué tipo de dulces te gustan? Cuéntanos cuáles son tus favoritos. Puedes mencionar chocolates, gomitas, galletas, postres, sabores, marcas, etc."] || "No respondió esta pregunta.";
+
+    document.getElementById("salty").textContent =
+      person["¿Qué cosas saladas te encantan para picar durante un turno? Cuéntanos tus snacks favoritos, incluyendo sabores o marcas si tienes alguna preferencia específica."] || "No respondió esta pregunta.";
+
+    document.getElementById("fruit").textContent =
+      person["Qué frutas te gustan y cuáles definitivamente no?"] || "No respondió esta pregunta.";
+
+    document.getElementById("drinks").textContent =
+      person["¿Qué bebidas te gustan? Puedes contarnos qué bebidas calientes o frías prefieres, qué sabores te gustan y, si tienes alguna favorita, también puedes mencionar la marca."] || "No respondió esta pregunta.";
+
+    document.getElementById("dislikes").textContent =
+      person["¿Qué cosas NO te gustan o preferirías no recibir? Sé tan específico/a como quieras. Esto ayudará a que tu amigo secreto no termine regalándote algo que vas a guardar por compromiso."] || "No respondió esta pregunta.";
+
+    document.getElementById("extra").textContent =
+      person["¿Hay algo que no te hayamos preguntado y que te gustaría que tu amigo secreto supiera?"] || "No respondió esta pregunta.";
+
+    profile.style.display = "block";
+
+    profile.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  });
+
+</script>
 
 </body>
 </html>
+```
