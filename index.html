@@ -254,105 +254,106 @@
 
   Papa.parse(sheetURL, {
 
-    download: true,
+  download: true,
 
-    header: true,
+  header: false,
 
-    skipEmptyLines: true,
+  skipEmptyLines: true,
 
-    complete: function(results) {
+  complete: function(results) {
 
-      people = results.data.filter(person => {
-        return person["Nombre"] && person["Nombre"].trim() !== "";
-      });
-
-      if (people.length === 0) {
-        loading.style.display = "none";
-        error.style.display = "block";
-        error.innerHTML =
-          "😅 Todavía no hay personas registradas en el formulario.";
-        return;
-      }
-
-      people.sort((a, b) =>
-        a["Nombre"].localeCompare(b["Nombre"], "es")
-      );
-
-      people.forEach((person, index) => {
-
-        const option = document.createElement("option");
-
-        option.value = index;
-
-        option.textContent = person["Nombre"];
-
-        select.appendChild(option);
-
-      });
-
-      loading.style.display = "none";
-    },
-
-    error: function() {
-
-      loading.style.display = "none";
-
-      error.style.display = "block";
-
-    }
-
-  });
-
-
-  select.addEventListener("change", function() {
-
-    const index = this.value;
-
-    if (index === "") {
-
-      profile.style.display = "none";
-
-      return;
-
-    }
-
-    const person = people[index];
-
-    document.getElementById("personName").textContent =
-      person["Nombre"] || "Sin nombre";
-
-    document.getElementById("about").textContent =
-      person["¿Cómo te describirías en pocas palabras? Cuéntanos un poquito sobre ti, tus hobbies o cualquier cosa que creas que pueda ayudarle a tu amigo secreto a conocerte mejor."] || "No respondió esta pregunta.";
-
-    document.getElementById("artist").textContent =
-      person["¿Cuál es tu artista favorito? Puedes mencionar uno o varios artistas, grupos, géneros musicales o cualquier cosa relacionada con la música que te guste."] || "No respondió esta pregunta.";
-
-    document.getElementById("sweet").textContent =
-      person["¿Qué tipo de dulces te gustan? Cuéntanos cuáles son tus favoritos. Puedes mencionar chocolates, gomitas, galletas, postres, sabores, marcas, etc."] || "No respondió esta pregunta.";
-
-    document.getElementById("salty").textContent =
-      person["¿Qué cosas saladas te encantan para picar durante un turno? Cuéntanos tus snacks favoritos, incluyendo sabores o marcas si tienes alguna preferencia específica."] || "No respondió esta pregunta.";
-
-    document.getElementById("fruit").textContent =
-      person["Qué frutas te gustan y cuáles definitivamente no?"] || "No respondió esta pregunta.";
-
-    document.getElementById("drinks").textContent =
-      person["¿Qué bebidas te gustan? Puedes contarnos qué bebidas calientes o frías prefieres, qué sabores te gustan y, si tienes alguna favorita, también puedes mencionar la marca."] || "No respondió esta pregunta.";
-
-    document.getElementById("dislikes").textContent =
-      person["¿Qué cosas NO te gustan o preferirías no recibir? Sé tan específico/a como quieras. Esto ayudará a que tu amigo secreto no termine regalándote algo que vas a guardar por compromiso."] || "No respondió esta pregunta.";
-
-    document.getElementById("extra").textContent =
-      person["¿Hay algo que no te hayamos preguntado y que te gustaría que tu amigo secreto supiera?"] || "No respondió esta pregunta.";
-
-    profile.style.display = "block";
-
-    profile.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
+    people = results.data.slice(1).filter(row => {
+      return row[1] && row[1].trim() !== "";
     });
 
+    if (people.length === 0) {
+      loading.style.display = "none";
+      error.style.display = "block";
+      error.innerHTML =
+        "😅 Todavía no hay personas registradas en el formulario.";
+      return;
+    }
+
+    people.sort((a, b) =>
+      a[1].localeCompare(b[1], "es")
+    );
+
+    people.forEach((person, index) => {
+
+      const option = document.createElement("option");
+
+      option.value = index;
+
+      option.textContent = person[1];
+
+      select.appendChild(option);
+
+    });
+
+    loading.style.display = "none";
+  },
+
+  error: function(error) {
+
+    console.error("Error leyendo el Sheet:", error);
+
+    loading.style.display = "none";
+    error.style.display = "block";
+
+    error.innerHTML =
+      "😵 No pudimos cargar las personas. Intenta actualizar la página.";
+
+  }
+
+});
+
+
+ select.addEventListener("change", function() {
+
+  const index = this.value;
+
+  if (index === "") {
+    profile.style.display = "none";
+    return;
+  }
+
+  const person = people[index];
+
+  document.getElementById("personName").textContent =
+    person[1] || "Sin nombre";
+
+  document.getElementById("about").textContent =
+    person[2] || "No respondió esta pregunta.";
+
+  document.getElementById("artist").textContent =
+    person[3] || "No respondió esta pregunta.";
+
+  document.getElementById("sweet").textContent =
+    person[4] || "No respondió esta pregunta.";
+
+  document.getElementById("salty").textContent =
+    person[5] || "No respondió esta pregunta.";
+
+  document.getElementById("fruit").textContent =
+    person[6] || "No respondió esta pregunta.";
+
+  document.getElementById("drinks").textContent =
+    person[7] || "No respondió esta pregunta.";
+
+  document.getElementById("dislikes").textContent =
+    person[8] || "No respondió esta pregunta.";
+
+  document.getElementById("extra").textContent =
+    person[9] || "No respondió esta pregunta.";
+
+  profile.style.display = "block";
+
+  profile.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
   });
+
+});
 
 </script>
 
