@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -233,7 +232,7 @@
 </div>
 
 <footer>
-  Hecho con 💚 para el amigo secreto
+  Hecho con 💚 por Gabi para jugar al amigo secreto
 </footer>
 
 
@@ -241,119 +240,127 @@
 
 <script>
 
-  const sheetURL =
+  // Cache-buster: le agregamos un parámetro con la hora actual para
+  // evitar que el navegador o Google nos devuelvan una copia vieja del CSV.
+  const baseSheetURL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUxlictPO1Mev3wXz0X2UujPE6HoS4AMOsp24EStab9jspANlQnt_BS2PBa0P3r8l9h33904gJomnZ/pub?gid=568351220&single=true&output=csv";
+
+  const sheetURL = baseSheetURL + "&cachebust=" + Date.now();
 
   let people = [];
 
   const select = document.getElementById("personSelect");
-  const loading = document.getElementById("loading");
-  const error = document.getElementById("error");
+  const loadingEl = document.getElementById("loading");
+  const errorEl = document.getElementById("error");
   const profile = document.getElementById("profile");
 
 
   Papa.parse(sheetURL, {
 
-  download: true,
+    download: true,
 
-  header: false,
+    header: false,
 
-  skipEmptyLines: true,
+    skipEmptyLines: true,
 
-  complete: function(results) {
+    complete: function(results) {
 
-    people = results.data.slice(1).filter(row => {
-      return row[1] && row[1].trim() !== "";
-    });
+      people = results.data.slice(1).filter(row => {
+        return row[1] && row[1].trim() !== "";
+      });
 
-    if (people.length === 0) {
-      loading.style.display = "none";
-      error.style.display = "block";
-      error.innerHTML =
-        "😅 Todavía no hay personas registradas en el formulario.";
+      if (people.length === 0) {
+        loadingEl.style.display = "none";
+        errorEl.style.display = "block";
+        errorEl.innerHTML =
+          "😅 Todavía no hay personas registradas en el formulario.";
+        return;
+      }
+
+      people.sort((a, b) =>
+        a[1].localeCompare(b[1], "es")
+      );
+
+      people.forEach((person, index) => {
+
+        const option = document.createElement("option");
+
+        option.value = index;
+
+        option.textContent = person[1];
+
+        select.appendChild(option);
+
+      });
+
+      loadingEl.style.display = "none";
+    },
+
+    // OJO: antes este parámetro se llamaba "error" y tapaba (shadow)
+    // a la constante "errorEl" (el div de error), lo que rompía este
+    // bloque si llegaba a ejecutarse. Ahora se llama "err" para evitar
+    // el choque de nombres.
+    error: function(err) {
+
+      console.error("Error leyendo el Sheet:", err);
+
+      loadingEl.style.display = "none";
+      errorEl.style.display = "block";
+
+      errorEl.innerHTML =
+        "😵 No pudimos cargar las personas. Intenta actualizar la página.";
+
+    }
+
+  });
+
+
+  select.addEventListener("change", function() {
+
+    const index = this.value;
+
+    if (index === "") {
+      profile.style.display = "none";
       return;
     }
 
-    people.sort((a, b) =>
-      a[1].localeCompare(b[1], "es")
-    );
+    const person = people[index];
 
-    people.forEach((person, index) => {
+    document.getElementById("personName").textContent =
+      person[1] || "Sin nombre";
 
-      const option = document.createElement("option");
+    document.getElementById("about").textContent =
+      person[2] || "No respondió esta pregunta.";
 
-      option.value = index;
+    document.getElementById("artist").textContent =
+      person[3] || "No respondió esta pregunta.";
 
-      option.textContent = person[1];
+    document.getElementById("sweet").textContent =
+      person[4] || "No respondió esta pregunta.";
 
-      select.appendChild(option);
+    document.getElementById("salty").textContent =
+      person[5] || "No respondió esta pregunta.";
 
+    document.getElementById("fruit").textContent =
+      person[6] || "No respondió esta pregunta.";
+
+    document.getElementById("drinks").textContent =
+      person[7] || "No respondió esta pregunta.";
+
+    document.getElementById("dislikes").textContent =
+      person[8] || "No respondió esta pregunta.";
+
+    document.getElementById("extra").textContent =
+      person[9] || "No respondió esta pregunta.";
+
+    profile.style.display = "block";
+
+    profile.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
     });
 
-    loading.style.display = "none";
-  },
-
-  error: function(error) {
-
-    console.error("Error leyendo el Sheet:", error);
-
-    loading.style.display = "none";
-    error.style.display = "block";
-
-    error.innerHTML =
-      "😵 No pudimos cargar las personas. Intenta actualizar la página.";
-
-  }
-
-});
-
-
- select.addEventListener("change", function() {
-
-  const index = this.value;
-
-  if (index === "") {
-    profile.style.display = "none";
-    return;
-  }
-
-  const person = people[index];
-
-  document.getElementById("personName").textContent =
-    person[1] || "Sin nombre";
-
-  document.getElementById("about").textContent =
-    person[2] || "No respondió esta pregunta.";
-
-  document.getElementById("artist").textContent =
-    person[3] || "No respondió esta pregunta.";
-
-  document.getElementById("sweet").textContent =
-    person[4] || "No respondió esta pregunta.";
-
-  document.getElementById("salty").textContent =
-    person[5] || "No respondió esta pregunta.";
-
-  document.getElementById("fruit").textContent =
-    person[6] || "No respondió esta pregunta.";
-
-  document.getElementById("drinks").textContent =
-    person[7] || "No respondió esta pregunta.";
-
-  document.getElementById("dislikes").textContent =
-    person[8] || "No respondió esta pregunta.";
-
-  document.getElementById("extra").textContent =
-    person[9] || "No respondió esta pregunta.";
-
-  profile.style.display = "block";
-
-  profile.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
   });
-
-});
 
 </script>
 
