@@ -232,16 +232,63 @@
 </div>
 
 <footer>
-  Hecho con 💚 por Gabi para jugar al amigo secreto
+  Hecho con 💚 para el amigo secreto
 </footer>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.3/papaparse.min.js"></script>
-
 <script>
 
-  // Cache-buster: le agregamos un parámetro con la hora actual para
-  // evitar que el navegador o Google nos devuelvan una copia vieja del CSV.
+  // Parser de CSV propio (sin dependencias externas / CDN).
+  // Soporta campos entre comillas que contienen comas, comillas escapadas ("")
+  // y saltos de línea dentro de un campo.
+  function parseCSV(str) {
+    const rows = [];
+    let row = [];
+    let field = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < str.length; i++) {
+      const char = str[i];
+      const next = str[i + 1];
+
+      if (inQuotes) {
+        if (char === '"' && next === '"') {
+          field += '"';
+          i++;
+        } else if (char === '"') {
+          inQuotes = false;
+        } else {
+          field += char;
+        }
+      } else {
+        if (char === '"') {
+          inQuotes = true;
+        } else if (char === ',') {
+          row.push(field);
+          field = '';
+        } else if (char === '\r') {
+          // ignorar
+        } else if (char === '\n') {
+          row.push(field);
+          rows.push(row);
+          row = [];
+          field = '';
+        } else {
+          field += char;
+        }
+      }
+    }
+
+    if (field.length > 0 || row.length > 0) {
+      row.push(field);
+      rows.push(row);
+    }
+
+    // Descartar filas completamente vacías (equivalente a skipEmptyLines)
+    return rows.filter(r => !(r.length === 1 && r[0].trim() === ""));
+  }
+
+  // Cache-buster: evita que el navegador o Google devuelvan una copia vieja del CSV.
   const baseSheetURL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTUxlictPO1Mev3wXz0X2UujPE6HoS4AMOsp24EStab9jspANlQnt_BS2PBa0P3r8l9h33904gJomnZ/pub?gid=568351220&single=true&output=csv";
 
@@ -254,18 +301,18 @@
   const errorEl = document.getElementById("error");
   const profile = document.getElementById("profile");
 
+  fetch(sheetURL)
+    .then(function(res) {
+      if (!res.ok) {
+        throw new Error("HTTP " + res.status);
+      }
+      return res.text();
+    })
+    .then(function(text) {
 
-  Papa.parse(sheetURL, {
+      const data = parseCSV(text);
 
-    download: true,
-
-    header: false,
-
-    skipEmptyLines: true,
-
-    complete: function(results) {
-
-      people = results.data.slice(1).filter(row => {
+      people = data.slice(1).filter(function(row) {
         return row[1] && row[1].trim() !== "";
       });
 
@@ -277,42 +324,26 @@
         return;
       }
 
-      people.sort((a, b) =>
-        a[1].localeCompare(b[1], "es")
-      );
+      people.sort(function(a, b) {
+        return a[1].localeCompare(b[1], "es");
+      });
 
-      people.forEach((person, index) => {
-
+      people.forEach(function(person, index) {
         const option = document.createElement("option");
-
         option.value = index;
-
         option.textContent = person[1];
-
         select.appendChild(option);
-
       });
 
       loadingEl.style.display = "none";
-    },
-
-    // OJO: antes este parámetro se llamaba "error" y tapaba (shadow)
-    // a la constante "errorEl" (el div de error), lo que rompía este
-    // bloque si llegaba a ejecutarse. Ahora se llama "err" para evitar
-    // el choque de nombres.
-    error: function(err) {
-
+    })
+    .catch(function(err) {
       console.error("Error leyendo el Sheet:", err);
-
       loadingEl.style.display = "none";
       errorEl.style.display = "block";
-
       errorEl.innerHTML =
         "😵 No pudimos cargar las personas. Intenta actualizar la página.";
-
-    }
-
-  });
+    });
 
 
   select.addEventListener("change", function() {
